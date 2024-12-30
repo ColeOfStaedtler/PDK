@@ -11,7 +11,8 @@ import java.lang.reflect.Method;
 
 public final class CommandRegistry {
 
-    public static void registerCommands(Class<?> target, JavaPlugin plugin) {
+    public static void registerCommands(Object instance, JavaPlugin plugin) {
+        Class<?> target = instance.getClass();
         for (Method method : target.getDeclaredMethods()) {
             if (!method.isAnnotationPresent(Command.class)) {
                 continue;
@@ -41,7 +42,7 @@ public final class CommandRegistry {
                 }
 
                 try {
-                    method.invoke(plugin, sender, args);
+                    method.invoke(instance, sender, args);
                 } catch (IllegalAccessException | InvocationTargetException e) {
                     sender.sendMessage(ChatColor.RED + "An error occurred while executing your command!");
                     Bukkit.getLogger().severe(ChatColor.RED + "Failed to invoke command handler for " + cmd.getName() + ":");
