@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableMap;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.cl.pdk.duel.annotation.StateHandler;
-import org.cl.pdk.listener.Listener;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -12,7 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public abstract class DuelHandler<T extends Settings> implements Listener {
+public abstract class DuelHandler<T extends Settings> {
     private final ImmutableMap<DuelState, Method> stateHandlers;
     private final Map<UUID, Duel<T>> playerDuels;
 
