@@ -1,4 +1,4 @@
-package org.cl.pdk.utils;
+package org.cl.pdk.misc;
 
 public final class Pair<T, U> {
     private T left;
