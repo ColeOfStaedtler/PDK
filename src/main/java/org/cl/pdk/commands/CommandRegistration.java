@@ -9,20 +9,26 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-public final class CommandRegistry {
+public final class CommandRegistration {
+
+    public static void unregisterCommand(String command, JavaPlugin plugin) {
+        plugin.getCommand(command).setExecutor(null);
+    }
 
     public static void registerCommands(Object instance, JavaPlugin plugin) {
         Class<?> target = instance.getClass();
-        for (Method method : target.getDeclaredMethods()) {
-            if (!method.isAnnotationPresent(Command.class)) {
+        for (Method method : target.getMethods()) {
+            Command annotation = method.getAnnotation(Command.class);
+
+            if (annotation == null) {
                 continue;
             }
 
-            Command annotation = target.getAnnotation(Command.class);
-            PluginCommand command = plugin.getCommand(annotation.command());
+            String rawCommand = annotation.command();
+            PluginCommand command = plugin.getCommand(rawCommand);
 
             if (command == null) {
-                Bukkit.getLogger().severe(annotation.command() + " declared in " + target.getSimpleName() + " is not registered in the plugin.yml! Skipping registration...");
+                Bukkit.getLogger().severe(rawCommand + " declared in " + target.getSimpleName() + " is not registered in the plugin.yml! Skipping registration...");
                 continue;
             }
 
